@@ -37,5 +37,21 @@ const productSchema = mongoose.Schema({
     timestamps: true    //Automaticamente genera los campos creadoEn y actualizadoEn
 });
 
-const Product = mongoose.model('Product', productSchema, 'Productos');   //Crear el modelo del producto
-module.exports = Producto;
+//Mongoose Middleware "hooks", pasan antes o despues de eventos
+productSchema.pre('save', function(next) {  //Antes de guardar, si el nombre fue modificado (put) quita los whitespaces
+    if(this.isModified('name')) {
+        this.name = this.name.trim();
+    }
+    next();
+});
+
+productSchema.pre('findOneAndUpdate', function(next) {  //Al modificar, al string del nombre actualizado le quita los whitespaces
+    const update = this.getUpdate();
+    if (update.name) {
+        update.name = update.name.trim();
+    }
+    next();
+});
+
+const Product = mongoose.model('Product', productSchema);   //Crear el modelo del producto
+module.exports = Product;
