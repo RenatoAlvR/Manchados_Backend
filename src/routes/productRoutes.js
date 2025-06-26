@@ -68,12 +68,14 @@ router.get('/:id', async (req, res) => {
     try {
         const product = await Product.findByID(req.params.id);    //Obtiene el producto segun su ID
         if(product){
-            res.json(producto);
+            res.json(product);
         } else{
             res.status(404).json({message: 'Error 404 Producto No Encontrado.'});
         }
-
     } catch(error){
+        if(error.name === 'CastError') {
+            return res.status(400).json({message: 'Formato de ID de producto invalido.'});
+        }
         console.error(error);
         res.status(500).json({message: 'Error obteniendo el producto.'});
     }
@@ -83,9 +85,8 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     try{
         const newProduct = new Product(req.body); //Crea el producto nuevo segun la data del req.body
-        const savedProduct = await newProduct.save();     //Lo guarda en la DB
+        const savedProduct = await newProduct.save();     //Lo guarda en la DB (se activa el hook pre save tambien)
         res.status(201).json(savedProduct);
-
     } catch(error){
         console.error(error);
         if(error.name === 'ValidationError'){
@@ -100,7 +101,7 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try{
         const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, {
-            new:true,   //retorna el documento actualizado
+            new: true,   //retorna el documento actualizado
             runValidators: true     //Obliga a que siga el Schema
         });
         if(updatedProduct){
@@ -109,6 +110,9 @@ router.put('/:id', async (req, res) => {
             res.status(404).json({message: 'Producto no encontrado, no se puede modificar.'});
         }
     } catch(error){
+        if(error.name === 'CastError') {
+            return res.status(400).json({message: 'Formato de ID invalido.'});
+        }
         console.error(error);
         if(error.name === 'ValidationError') {
             const messages = Object.values(error.errors).map(val => val.message);
@@ -128,6 +132,9 @@ router.delete('/:id', async (req, res) => {
             res.status(404).json({ message: 'Producto no encontrado.' });
         }
     } catch (error) {
+        if(error.name === 'castError') {
+            return res.status(400).json({message: 'Formato de ID invalido.'});
+        }
         console.error(error);
         res.status(500).json({ message: 'Error al eliminar el producto.' });
     }
