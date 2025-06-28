@@ -3,6 +3,9 @@ require('dotenv').config(); //Carga las variables del archivo .env, en este caso
 const express = require('express');
 const logger = require('./middleware/logger');
 const productRoutes = require('./routes/productRoutes');
+const userRoutes = require('./routes/userRoutes');
+const cartRoutes = require('./routes/cartRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 const connectDB = require('./config/db');   //Importa la conexion a la DB
 
 const app =  express();
@@ -19,6 +22,10 @@ app.get('/', (req, res) => {
 
 //Rutas (las manejara nuestro Router)
 app.use('/api/products', productRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/orders', orderRoutes);
+
 
 //Middleware para manejo de errores
 //Error 404 - Not Found
@@ -44,6 +51,9 @@ app.listen(port, () => {
   console.log(`Backend server listening on port ${port}`);
   console.log(`Access root: http://localhost:${port}`);
   console.log(`Test products API: http://localhost:${port}/api/products`);
+  console.log(`Test products API: http://localhost:${port}/api/users`);
+  console.log(`Test products API: http://localhost:${port}/api/cart`);
+  console.log(`Test products API: http://localhost:${port}/api/orders`);
   console.log(`MongoDB URI loaded: ${process.env.MONGO_URI ? 'Yes' : 'No'}`);
   connectDB();
 });
