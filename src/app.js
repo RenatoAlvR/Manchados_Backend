@@ -1,15 +1,20 @@
 //  ..src/app.js
 require('dotenv').config(); //Carga las variables del archivo .env, en este caso, el puerto y la URI de la base de datos
+
 const express = require('express');
 const logger = require('./middleware/logger');
+const connectDB = require('./config/db');   //Importa la conexion a la DB
+
 const productRoutes = require('./routes/productRoutes');
 const userRoutes = require('./routes/userRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const orderRoutes = require('./routes/orderRoutes');
-const connectDB = require('./config/db');   //Importa la conexion a la DB
+
 
 const app =  express();
 const port = process.env.port || 3000;
+
+connectDB();
 
 //Uso de middleware global
 app.use(logger);    //Recopilara logs sobre las operaciones realizadas (en terminal)
@@ -55,5 +60,4 @@ app.listen(port, () => {
   console.log(`Test products API: http://localhost:${port}/api/cart`);
   console.log(`Test products API: http://localhost:${port}/api/orders`);
   console.log(`MongoDB URI loaded: ${process.env.MONGO_URI ? 'Yes' : 'No'}`);
-  connectDB();
 });
