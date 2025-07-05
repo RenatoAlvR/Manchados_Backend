@@ -84,7 +84,7 @@ userSchema.methods.getSignedJwtToken = function() {     //Genera el token JWT
 };
 
 userSchema.methods.matchPassword = async function(ContraseñaIngresada) {
-    return await bcrypt.compare(ContraseñaIngresada, this.password);
+    return await bcrypt.compare(ContraseñaIngresada, this.Contraseña);
 };
 
 const User = mongoose.model('User', userSchema);
