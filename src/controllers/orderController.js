@@ -1,4 +1,4 @@
-
+const Product = require('../models/Product');
 const Order = require('../models/Order');
 
 exports.getAllOrders = async (req, res) => {
@@ -12,12 +12,39 @@ exports.getAllOrders = async (req, res) => {
 };
 
 exports.createOrder = async (req, res) => {
+  const nuevaOrden = req.body;
+
   try {
-    const order = await Order.create(req.body);
-    res.status(201).json(order);
+    // Validar stock producto por producto
+    for (const item of nuevaOrden.ItemsOrdenados) {
+      const producto = await Product.findOne({ ProductoID: item.ProductoID });
+
+      if (!producto) {
+        return res.status(404).json({ message: `Producto ID ${item.ProductoID} no encontrado` });
+      }
+
+      if (producto.stock < item.Cantidad) {
+        return res.status(400).json({
+          message: `Stock insuficiente para "${producto.name}". Disponible: ${producto.stock}, solicitado: ${item.Cantidad}`
+        });
+      }
+    }
+
+    // Descontar stock de cada producto
+    for (const item of nuevaOrden.ItemsOrdenados) {
+      await Product.findOneAndUpdate(
+        { ProductoID: item.ProductoID },
+        { $inc: { stock: -item.Cantidad } }
+      );
+    }
+
+    // Guardar orden
+    const orden = await Order.create(nuevaOrden);
+    res.status(201).json({ message: 'Orden creada y stock actualizado', orden });
+
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Error al crear orden' });
+    res.status(500).json({ message: 'Error al crear orden', error });
   }
 };
 

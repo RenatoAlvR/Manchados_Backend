@@ -26,7 +26,7 @@ const productSchema = mongoose.Schema({
     stock: {
         type: Number,
         required: [true, 'Por favor ingresa la cantidad disponible del producto.'],
-        min: [0, 'El stock no puede ser negativo, imbecil.'],
+        min: [0, 'El stock no puede ser negativo.'],
         default: 0
     },
     imageUrl: {
