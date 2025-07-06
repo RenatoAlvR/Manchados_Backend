@@ -3,6 +3,7 @@ require('dotenv').config(); //Carga las variables del archivo .env, en este caso
 
 const express = require('express');
 const logger = require('./middleware/logger');
+const cors = require('cors');
 const connectDB = require('./config/db');   //Importa la conexion a la DB
 
 const productRoutes = require('./routes/productRoutes');
@@ -19,6 +20,7 @@ connectDB();
 //Uso de middleware global
 app.use(logger);    //Recopilara logs sobre las operaciones realizadas (en terminal)
 app.use(express.json());    //Todas las res seran JSON basicamente
+app.use(cors());
 
 //Ruta raiz (root)
 app.get('/', (req, res) => {
