@@ -22,6 +22,14 @@ app.use(logger);    //Recopilara logs sobre las operaciones realizadas (en termi
 app.use(express.json());    //Todas las res seran JSON basicamente
 app.use(cors());
 
+/*
+app.use(cors({
+    origin: 'https://your-frontend-domain.com', // Replace with your actual frontend domain
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization'] // Allow Authorization header for JWTs
+}));
+*/ //Esto es para cuando esté hosteado en una plataforma, hay que especificar la URL para evitar problemas de seguridad.
+
 //Ruta raiz (root)
 app.get('/', (req, res) => {
     res.send('Bienvenido a la pagina de Ecommerce de Manchados!');
