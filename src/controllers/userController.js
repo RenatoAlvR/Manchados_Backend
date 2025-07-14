@@ -7,6 +7,13 @@ exports.registerUser = async (req, res) => {
   try {
     const user = await User.create(req.body);
     const token = user.getSignedJwtToken();
+
+    const newCart = await Cart.create({
+      UsuarioAsociadoID: user._id, // <-- THIS IS THE CORRECT LINK!
+      ListaItems: [] // Initialize with an empty array of items
+    });
+    console.log('New cart created for user:', newCart._id); // For debugging
+
     res.status(201).json({ success: true, token, user });
   } catch (error) {
     console.error(error);

@@ -2,14 +2,11 @@
 const mongoose = require('mongoose');
 
 const cartSchema = mongoose.Schema({
-    CarritoID: {
-        type: Number,
+    UsuarioAsociadoID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User', // <-- Mongoose hint for population
         required: true,
         unique: true
-    },
-    UsuarioAsociadoID: {
-        type: Number,
-        required: true
     },
     UltimoCambio: {
         type: String,
@@ -17,8 +14,9 @@ const cartSchema = mongoose.Schema({
     },
     ListaItems: [
         {
-            ProductoID: {
-                type: Number,
+            ProductoID: { // This should also be ObjectId if you're referencing Product model
+                type: mongoose.Schema.Types.ObjectId, // <-- CRITICAL CHANGE: Use ObjectId
+                ref: 'Product', // <-- Mongoose hint for population
                 required: true
             },
             Cantidad: {
