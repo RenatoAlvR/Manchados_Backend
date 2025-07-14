@@ -43,3 +43,26 @@ exports.loginUser = async (req, res) => {
 exports.getProfile = async (req, res) => {
   res.json(req.user);
 };
+
+// NEW FUNCTION: Get All Users
+exports.getAllUsers = async (req, res) => {
+    try {
+        // Fetch all users from the database
+        // .select('-password') excludes the password hash from the response for security
+        const users = await User.find().select('-password');
+
+        // Send a 200 OK response with the list of users
+        res.status(200).json({
+            success: true,
+            data: users, // Returning the users array under a 'data' key is a common practice
+            message: 'Usuarios obtenidos exitosamente.'
+        });
+    } catch (error) {
+        console.error('Error al obtener todos los usuarios:', error);
+        // Send a 500 Internal Server Error response if something goes wrong
+        res.status(500).json({
+            success: false,
+            message: 'Error del servidor al obtener usuarios.'
+        });
+    }
+};
