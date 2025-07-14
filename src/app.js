@@ -20,15 +20,16 @@ connectDB();
 //Uso de middleware global
 app.use(logger);    //Recopilara logs sobre las operaciones realizadas (en terminal)
 app.use(express.json());    //Todas las res seran JSON basicamente
-app.use(cors());
+//app.use(cors());
 
-/*
+
 app.use(cors({
-    origin: 'https://your-frontend-domain.com', // Replace with your actual frontend domain
+    origin: 'https://manchados-utem.netlify.app',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization'] // Allow Authorization header for JWTs
+    allowedHeaders: ['Content-Type', 'Authorization'],  // Allow Authorization header for JWTs
+    credentials: true //Permite cookies.
 }));
-*/ //Esto es para cuando esté hosteado en una plataforma, hay que especificar la URL para evitar problemas de seguridad.
+
 
 //Ruta raiz (root)
 app.get('/', (req, res) => {
