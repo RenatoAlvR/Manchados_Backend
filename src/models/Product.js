@@ -2,12 +2,6 @@
 const mongoose = require('mongoose');
 
 const productSchema = mongoose.Schema({
-    ProductoID: {
-        type: Number,
-        required: true,
-        unique: true
-    },
-
     name: {
         type: String,
         required: [true, 'Por favor ingresa el nombre del producto.']
@@ -25,7 +19,7 @@ const productSchema = mongoose.Schema({
         type: String,
         required: [true, 'Por favor ingresa la categoria del producto.'],
         enum: {     //Validacion, la categoria DEBE ser una de las siguientes
-            values: ['Electronicos', 'Ropa', 'Libros', 'Hogar', 'Otro'],
+            values: ['Perro', 'Gato', 'Exótico', 'Juguete', 'Comida', 'Aseo', 'Casa', 'Hábitat'],
             message: `{VALUE} no es una categoria valida.`
         }
     },

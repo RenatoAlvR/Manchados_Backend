@@ -2,11 +2,6 @@
 const mongoose = require('mongoose');
 
 const orderSchema = mongoose.Schema({
-    OrdenID: {
-        type: Number,
-        required: true,
-        unique: true
-    },
     FechaOrden: {
         type: String,
         default: ''
@@ -40,7 +35,7 @@ const orderSchema = mongoose.Schema({
     ItemsOrdenados: [
         {
             ProductoID: {
-                type: Number,
+                type: mongoose.Schema.Types.ObjectId,
                 required: true
             },
             Cantidad: {
@@ -54,7 +49,7 @@ const orderSchema = mongoose.Schema({
         }
     ],
     UsuarioID: {
-        type: Number,
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     }
 }, {
